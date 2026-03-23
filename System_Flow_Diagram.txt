@@ -1,0 +1,202 @@
+# Smart Waste Management System - System Flow Diagram
+
+## System Architecture Overview
+
++-----------------------------------------------------------------------------------------+
+|                         Smart Waste Management System (SWMS)                            |
++-----------------------------------------------------------------------------------------+
+|                                                                                         |
+|  +-----------------+      +-----------------+      +-----------------+                |
+|  |   Frontend      |      |    Backend      |      |    Database     |                |
+|  |   (React.js)    |<---->|   (Node.js)     |<---->|   (MongoDB)     |                |
+|  |                 |      |   (Express)     |      |                 |                |
+|  +-----------------+      +-----------------+      +-----------------+                |
+|                                                                                         |
++-----------------------------------------------------------------------------------------+
+
+## User Roles & Authentication Flow
+
++-----------------------------------------------------------------------------------------+
+|                                  Authentication Flow                                    |
++-----------------------------------------------------------------------------------------+
+|                                                                                         |
+|  +-------------+     +-------------+     +-------------+     +-------------+           |
+|  |    User     |     |   Driver    |     |   Admin     |     |  Frontend   |           |
+|  |  Interface  |     |  Interface  |     |  Interface  |     |   (React)   |           |
+|  +------+------+     +------+------+     +------+------+     +------+------+           |
+|         |                   |                   |                   |                   |
+|         +-------------------+-------------------+-------------------+                   |
+|                             |                   |                                       |
+|                             v                   v                                       |
+|                    +-----------------------------+                                     |
+|                    |         Login/Register       |                                     |
+|                    |           (API)              |                                     |
+|                    +-------------+---------------+                                     |
+|                                  |                                                     |
+|                                  v                                                     |
+|                         +-----------------+                                           |
+|                         |   Middleware    |                                           |
+|                         | Authentication  |                                           |
+|                         +--------+--------+                                           |
+|                                  |                                                     |
+|                                  v                                                     |
+|                    +-----------------------------+                                     |
+|                    |   Role-based Authorization  |                                     |
+|                    |   (User/Driver/Admin)       |                                     |
+|                    +-----------------------------+                                     |
+|                                                                                         |
++-----------------------------------------------------------------------------------------+
+
+## Data Models & Relationships
+
++-----------------------------------------------------------------------------------------+
+|                                Database Models                                         |
++-----------------------------------------------------------------------------------------+
+|                                                                                         |
+|  +-----------------+       +-----------------+       +-----------------+               |
+|  |      User       |       |       Bin       |       |   Complaint     |               |
+|  +-----------------+       +-----------------+       +-----------------+               |
+|  +-------------+           +-------------+           +-------------+                     |
+|  | _id         |           | _id         |           | _id         |                     |
+|  | firstName   |           | binName     |           | user        |<---------------+  |
+|  | lastName    |           | location    |           | bin         |<---------------+  |
+|  | email       |           | type        |           | description |              |  |
+|  | password    |           | assigned    |           | status      |              |  |
+|  | role        |           | Driver      |           | createdAt   |              |  |
+|  | driverPin   |           | cleaning    |           | resolvedAt  |              |  |
+|  | phone       |           | Period      |           +-------------+              |  |
+|  | address     |           | status      |                                        |  |
+|  | photo       |           | fillLevel   |                                        |  |
+|  | status      |           | lastCleaned |                                        |  |
+|  | area        |           +-------------+                                        |  |
+|  | createdAt   |                                                                |  |
+|  +-------------+                                                                |  |
+|        |                                                                        |  |
+|        +------------------------------------------------------------------------+  |
+|                                                                                       |
+|  +-----------------+                                                                |  |
+|  |    Schedule     |                                                                |  |
+|  +-----------------+                                                                |  |
+|  +-------------+                                                                   |  |
+|  | _id         |                                                                   |  |
+|  | user        |<-------------------------------------------------------------------+  |
+|  | date        |                                                                      |
+|  | time        |                                                                      |
+|  | reason      |                                                                      |
+|  | wasteType   |                                                                      |
+|  | location    |                                                                      |
+|  | status      |                                                                      |
+|  | updatedAt   |                                                                      |
+|  +-------------+                                                                      |
+|                                                                                         |
++-----------------------------------------------------------------------------------------+
+
+## System Flow & API Endpoints
+
++-----------------------------------------------------------------------------------------+
+|                              System Flow & API Endpoints                               |
++-----------------------------------------------------------------------------------------+
+|                                                                                         |
+|  +---------------------------------------------------------------------------------+   |
+|  |                               Frontend (React)                                  |   |
+|  +---------------------------------------------------------------------------------+   |
+|                                    |                                                   |
+|                                    v                                                   |
+|  +---------------------------------------------------------------------------------+   |
+|  |                                Backend (Node.js)                                 |   |
+|  |                                                                                 |   |
+|  |  +-----------------+  +-----------------+  +-----------------+  +-------------+ |   |
+|  |  |  Auth Routes    |  |  Profile Routes |  |  Bin Routes     |  | Schedule    | |   |
+|  |  |                 |  |                 |  |                 |  | Routes      | |   |
+|  |  | /login          |  | /profile        |  | POST /bins      |  | POST /      | |   |
+|  |  | /register       |  | PUT /profile    |  | GET /bins       |  | schedules   | |   |
+|  |  | /admin/login    |  |                 |  | PUT /bins/:id   |  | GET /       | |   |
+|  |  |                 |  |                 |  | PUT /bins/:id/   |  | schedules   | |   |
+|  |  |                 |  |                 |  | status          |  | PUT /       | |   |
+|  |  |                 |  |                 |  |                 |  | schedules/  | |   |
+|  |  |                 |  |                 |  |                 |  | :id         | |   |
+|  |  +-----------------+  +-----------------+  +-----------------+  +-------------+ |   |
+|  |                                                                                 |   |
+|  |  +-----------------+  +-----------------+  +-----------------+                     |   |
+|  |  | Complaint Routes|  | User Routes     |  | Driver Routes   |                     |   |
+|  |  |                 |  |                 |  |                 |                     |   |
+|  |  | POST /          |  | GET /auth/users |  | GET /driver/    |                     |   |
+|  |  | complaints      |  | PUT /auth/users/|  | bins            |                     |   |
+|  |  | GET /           |  | :id             |  | PUT /driver/    |                     |   |
+|  |  | complaints      |  |                 |  | status          |                     |   |
+|  |  | GET /           |  |                 |  |                 |                     |   |
+|  |  | complaints/my   |  |                 |  |                 |                     |   |
+|  |  | PUT /           |  |                 |  |                 |                     |   |
+|  |  | complaints/:id  |  |                 |  |                 |                     |   |
+|  |  +-----------------+  +-----------------+  +-----------------+                     |   |
+|  |                                                                                 |   |
+|  +---------------------------------------------------------------------------------+   |
+|                                    |                                                   |
+|                                    v                                                   |
+|  +---------------------------------------------------------------------------------+   |
+|  |                                Database (MongoDB)                               |   |
+|  |                                                                                 |   |
+|  |  +-------------+  +-------------+  +-------------+  +-------------+             |   |
+|  |  |    User     |  |     Bin     |  |  Complaint  |  |  Schedule   |             |   |
+|  |  | Collection  |  |  Collection  |  | Collection  |  | Collection  |             |   |
+|  |  +-------------+  +-------------+  +-------------+  +-------------+             |   |
+|  |                                                                                 |   |
+|  +---------------------------------------------------------------------------------+   |
+|                                                                                         |
++-----------------------------------------------------------------------------------------+
+
+## User Workflows
+
+### Admin Workflow
+1. Login to Admin Dashboard
+2. Manage Waste Bins (Create, Update, Delete)
+3. Assign bins to drivers
+4. Monitor and resolve complaints
+5. View user details
+6. Manage driver schedules
+7. Track work reports
+
+### Driver Workflow
+1. Login to Driver Dashboard
+2. View assigned bins
+3. Update work status
+4. Access bin locations via Google Maps
+5. Mark tasks as completed
+6. Update personal profile
+
+### User Workflow
+1. Register/Login to User Portal
+2. Submit complaints about waste bins
+3. Track complaint status
+4. Update personal profile
+5. Request special waste collection schedules
+
+## Key Features
+
+1. User Authentication & Authorization
+   - Role-based access control (Admin, Driver, User)
+   - JWT token-based authentication
+   - Secure password hashing
+
+2. Bin Management
+   - Create, update, and delete waste bins
+   - Assign drivers to bins
+   - Track bin status and fill levels
+   - Monitor cleaning schedules
+
+3. Complaint System
+   - Submit complaints about waste bins
+   - Track complaint status
+   - Resolve complaints
+   - Suggest new bin locations
+
+4. Schedule Management
+   - Create custom waste collection schedules
+   - Approve or reject schedule requests
+   - Assign drivers to schedules
+   - Track schedule status
+
+5. Location Tracking
+   - Google Maps integration
+   - Bin location mapping
+   - Route optimization for drivers

@@ -1,0 +1,12 @@
+{
+  "name": "windsurf-project",
+  "version": "1.0.0",
+  "description": "## Project Overview A web-based garbage management system that helps monitor and manage waste collection in cities. This system connects citizens, waste collection drivers, and administrators through a unified platform.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
