@@ -33,6 +33,7 @@ app.use('/api/schedules', scheduleRoutes);
 app.use('/api/bins', binRoutes);
 
 // Connect to MongoDB
+console.log(process.env.MONGO_URI);
 mongoose.connect('process.env.MONGO_URI', {
   useNewUrlParser: true,
   useUnifiedTopology: true
