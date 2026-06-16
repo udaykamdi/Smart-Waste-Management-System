@@ -33,7 +33,6 @@ app.use('/api/schedules', scheduleRoutes);
 app.use('/api/bins', binRoutes);
 
 // Connect to MongoDB
-console.log("URI =", process.env.MONGO_URI);
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected"))
   .catch(err => console.error(err));
