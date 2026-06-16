@@ -497,5 +497,9 @@ app.put('/api/auth/users/:id', async (req, res) => {
   }
 });
 
+app.get("/", (req, res) => {
+  res.send("Smart Waste Management Backend is running 🚀");
+});
+
 const PORT = 4000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
