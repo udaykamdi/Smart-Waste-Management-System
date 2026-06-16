@@ -9,7 +9,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:4000',
+        target: 'https://smart-waste-management-system-0t43.onrender.com',
         changeOrigin: true,
       }
     }

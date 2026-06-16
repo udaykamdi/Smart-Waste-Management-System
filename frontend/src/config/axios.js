@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create axios instance with base URL
 const instance = axios.create({
-    baseURL: 'http://localhost:4000/api' // Backend server URL
+    baseURL: 'https://smart-waste-management-system-0t43.onrender.com/api' // Backend server URL
 });
 
 // Add request interceptor to add auth token
