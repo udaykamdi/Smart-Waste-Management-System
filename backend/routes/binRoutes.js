@@ -14,6 +14,31 @@ router.get('/', protect, async (req, res) => {
     }
 });
 
+// Get all unique areas
+router.get('/areas', async (req, res) => {
+    try {
+        const areas = await Bin.distinct('location');
+        res.json(areas);
+    } catch (err) {
+        console.error('Error fetching areas:', err);
+        res.status(500).json({ message: 'Error fetching areas' });
+    }
+});
+
+// Get bins by area name
+router.get('/areas/:areaName', async (req, res) => {
+    try {
+        const bins = await Bin.find({
+            location: req.params.areaName
+        });
+
+        res.json(bins);
+    } catch (err) {
+        console.error('Error fetching area details:', err);
+        res.status(500).json({ message: 'Error fetching area details' });
+    }
+});
+
 // Get bins assigned to driver
 router.get('/assigned', protect, authorize('driver'), async (req, res) => {
     try {
@@ -29,7 +54,7 @@ router.get('/assigned', protect, authorize('driver'), async (req, res) => {
 router.put('/:id/status', protect, authorize('driver'), async (req, res) => {
     try {
         const bin = await Bin.findById(req.params.id);
-        
+
         if (!bin) {
             return res.status(404).json({ message: 'Bin not found' });
         }
@@ -39,6 +64,7 @@ router.put('/:id/status', protect, authorize('driver'), async (req, res) => {
         }
 
         bin.status = req.body.status;
+
         if (req.body.status === 'completed') {
             bin.lastCleaned = new Date();
         }
@@ -66,10 +92,16 @@ router.post('/', protect, authorize('admin'), async (req, res) => {
 // Update bin (admin only)
 router.put('/:id', protect, authorize('admin'), async (req, res) => {
     try {
-        const bin = await Bin.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const bin = await Bin.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+        );
+
         if (!bin) {
             return res.status(404).json({ message: 'Bin not found' });
         }
+
         res.json(bin);
     } catch (err) {
         console.error('Error updating bin:', err);
@@ -81,24 +113,16 @@ router.put('/:id', protect, authorize('admin'), async (req, res) => {
 router.delete('/:id', protect, authorize('admin'), async (req, res) => {
     try {
         const bin = await Bin.findByIdAndDelete(req.params.id);
+
         if (!bin) {
             return res.status(404).json({ message: 'Bin not found' });
         }
+
         res.json({ message: 'Bin deleted successfully' });
     } catch (err) {
         console.error('Error deleting bin:', err);
         res.status(500).json({ message: 'Error deleting bin' });
     }
-});
-
-router.get('/areas', async (req, res) => {
-  try {
-    const areas = await Bin.distinct('location');
-    res.json(areas);
-  } catch (err) {
-    console.error('Error fetching areas:', err);
-    res.status(500).json({ message: 'Error fetching areas' });
-  }
 });
 
 module.exports = router;

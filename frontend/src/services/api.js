@@ -1,4 +1,3 @@
-
 import axios from '../config/axios';
 import axiosExternal from 'axios';
 
@@ -93,45 +92,28 @@ export function logout() {
 export async function getAreas() {
   try {
     console.log('Fetching areas from SWMS API...');
-    const { data } = await SWMS_API.get('/api/areas');
+
+    const { data } = await SWMS_API.get('/api/bins/areas');
+
     console.log('Areas data received from API:', data);
     return data;
   } catch (error) {
     console.error('Failed to fetch areas from SWMS API:', error.message);
-    
-    // Return fallback data when API is not available
-    const fallbackData = {
-      vadodara_societies_by_area: {
-        'Alkapuri': ['Society 1', 'Society 2', 'Society 3'],
-        'Manjalpur': ['Society A', 'Society B'],
-        'Sayajigunj': ['Residential Complex', 'Apartments'],
-        'Wadi': ['Colony 1', 'Colony 2', 'Colony 3', 'Colony 4']
-      }
-    };
-    
-    console.log('Using fallback areas data');
-    return fallbackData;
+    throw error;
   }
 }
 
 export async function getAreaByName(areaName) {
   try {
     console.log(`Fetching area data for: ${areaName}`);
-    const { data } = await SWMS_API.get(`/api/areas/${areaName}`);
+
+    const { data } = await SWMS_API.get(`/api/bins/areas/${areaName}`);
+
     console.log(`Area data received for ${areaName}:`, data);
     return data;
   } catch (error) {
     console.error(`Failed to fetch area ${areaName}:`, error.message);
-
-    // Return fallback data for specific area
-    const fallbackAreaData = {
-      area: areaName,
-      societies: ['Society A', 'Society B', 'Society C'],
-      status: 'Available'
-    };
-
-    console.log(`Using fallback data for area: ${areaName}`);
-    return fallbackAreaData;
+    throw error;
   }
 }
 
