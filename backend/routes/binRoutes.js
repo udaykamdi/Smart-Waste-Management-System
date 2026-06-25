@@ -91,4 +91,14 @@ router.delete('/:id', protect, authorize('admin'), async (req, res) => {
     }
 });
 
+router.get('/areas', async (req, res) => {
+  try {
+    const areas = await Bin.distinct('location');
+    res.json(areas);
+  } catch (err) {
+    console.error('Error fetching areas:', err);
+    res.status(500).json({ message: 'Error fetching areas' });
+  }
+});
+
 module.exports = router;
