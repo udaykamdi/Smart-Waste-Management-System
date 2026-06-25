@@ -4,9 +4,12 @@ import axiosExternal from 'axios';
 
 const API = axios;
 
+// Backend API URL
+const API_URL = "https://smart-waste-management-system-0t43.onrender.com";
+
 // Create axios instance for external SWMS area API
 const SWMS_API = axiosExternal.create({
-    baseURL: 'https://swms-area-api.onrender.com',
+    baseURL: API_URL,
     timeout: 30000, // Increased timeout to 30 seconds
     headers: {
         'Content-Type': 'application/json',
