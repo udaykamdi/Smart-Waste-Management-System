@@ -88,17 +88,17 @@ export function logout() {
   localStorage.removeItem('user');
 }
 
-// SWMS Area API functions - using real API data with fallback
+// SWMS Area API functions - using our backend API
 export async function getAreas() {
   try {
-    console.log('Fetching areas from SWMS API...');
+    console.log('Fetching areas from backend API...');
 
-    const { data } = await SWMS_API.get('/api/bins/areas');
+    const { data } = await API.get('/bins/areas');
 
     console.log('Areas data received from API:', data);
     return data;
   } catch (error) {
-    console.error('Failed to fetch areas from SWMS API:', error.message);
+    console.error('Failed to fetch areas from backend API:', error.message);
     throw error;
   }
 }
@@ -107,7 +107,7 @@ export async function getAreaByName(areaName) {
   try {
     console.log(`Fetching area data for: ${areaName}`);
 
-    const { data } = await SWMS_API.get(`/api/bins/areas/${areaName}`);
+    const { data } = await API.get(`/bins/areas/${areaName}`);
 
     console.log(`Area data received for ${areaName}:`, data);
     return data;
@@ -119,8 +119,8 @@ export async function getAreaByName(areaName) {
 
 export async function getBaseInfo() {
   try {
-    console.log('Fetching base info from SWMS API...');
-    const { data } = await SWMS_API.get('/');
+    console.log('Fetching base info from backend API...');
+    const { data } = await API.get('/');
     console.log('Base info received:', data);
     return data;
   } catch (error) {

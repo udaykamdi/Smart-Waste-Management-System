@@ -497,6 +497,80 @@ app.put('/api/auth/users/:id', async (req, res) => {
   }
 });
 
+// Area endpoints
+app.get("/api/areas", async (req, res) => {
+  try {
+    // Return hardcoded areas data
+    const areasData = {
+      vadodara_societies_by_area: {
+        'Alkapuri': ['Society 1', 'Society 2', 'Society 3'],
+        'Manjalpur': ['Society A', 'Society B'],
+        'Sayajigunj': ['Residential Complex', 'Apartments'],
+        'Wadi': ['Colony 1', 'Colony 2', 'Colony 3', 'Colony 4']
+      }
+    };
+    res.json(areasData);
+  } catch (error) {
+    console.error('Error fetching areas:', error);
+    res.status(500).json({ message: 'Internal Server Error', error: error.message });
+  }
+});
+
+app.get("/api/areas/:areaName", async (req, res) => {
+  try {
+    const { areaName } = req.params;
+
+    // Return hardcoded area data for the specific area
+    const areaData = {
+      area: areaName,
+      societies: ['Society A', 'Society B', 'Society C'],
+      status: 'Available'
+    };
+
+    res.json(areaData);
+  } catch (error) {
+    console.error('Error fetching area:', error);
+    res.status(500).json({ message: 'Internal Server Error', error: error.message });
+  }
+});
+
+// Legacy route for bins/areas to match frontend expectation
+app.get("/api/bins/areas", async (req, res) => {
+  try {
+    // Return hardcoded areas data
+    const areasData = {
+      vadodara_societies_by_area: {
+        'Alkapuri': ['Society 1', 'Society 2', 'Society 3'],
+        'Manjalpur': ['Society A', 'Society B'],
+        'Sayajigunj': ['Residential Complex', 'Apartments'],
+        'Wadi': ['Colony 1', 'Colony 2', 'Colony 3', 'Colony 4']
+      }
+    };
+    res.json(areasData);
+  } catch (error) {
+    console.error('Error fetching bins/areas:', error);
+    res.status(500).json({ message: 'Internal Server Error', error: error.message });
+  }
+});
+
+app.get("/api/bins/areas/:areaName", async (req, res) => {
+  try {
+    const { areaName } = req.params;
+
+    // Return hardcoded area data for the specific area
+    const areaData = {
+      area: areaName,
+      societies: ['Society A', 'Society B', 'Society C'],
+      status: 'Available'
+    };
+
+    res.json(areaData);
+  } catch (error) {
+    console.error('Error fetching bins/area:', error);
+    res.status(500).json({ message: 'Internal Server Error', error: error.message });
+  }
+});
+
 app.get("/", (req, res) => {
   res.send("Smart Waste Management Backend is running 🚀");
 });
