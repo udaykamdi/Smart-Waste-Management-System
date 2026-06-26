@@ -20,35 +20,29 @@ function DriverManagement() {
     Inactive: 'text-gray-500',
   };
 
-  // Fetch areas from API
+  // Fetch areas from MongoDB API
   useEffect(() => {
     async function fetchAreas() {
       try {
         setLoadingAreas(true);
+
         const data = await getAreas();
-        // Handle different possible response formats
-        if (Array.isArray(data)) {
-          setAreas(data);
-        } else if (data && Array.isArray(data.areas)) {
-          setAreas(data.areas);
-        } else if (data && data.vadodara_societies_by_area) {
-          // Extract area names from the object
-          const areaNames = Object.keys(data.vadodara_societies_by_area);
-          setAreas(areaNames.map(area => ({ area })));
-        } else {
-          console.error('Unexpected data format for areas:', data);
-          setAreas([]);
-        }
+
+        console.log("Areas received:", data);
+
+        setAreas(data); // Store API response directly
+
       } catch (err) {
-        console.error('Failed to fetch areas:', err);
+        console.error("Failed to fetch areas:", err);
         setAreas([]);
       } finally {
         setLoadingAreas(false);
       }
     }
+
     fetchAreas();
   }, []);
-
+  
   // Polling for real-time updates
   useEffect(() => {
     let isMounted = true;
@@ -142,14 +136,15 @@ function DriverManagement() {
                     <p className="text-gray-500">Loading areas...</p>
                   ) : (
                     <select
-                      value={selectedAreas[driver._id] || driver.area || ''}
+                      value={selectedAreas[driver._id] || driver.area || ""}
                       onChange={(e) => handleAreaChange(driver._id, e.target.value)}
                       className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-blue-500"
                     >
                       <option value="">Select an area</option>
-                      {areas.map((area, index) => (
-                        <option key={index} value={area.area || area}>
-                          {area.area || area}
+
+                      {areas.map((area) => (
+                        <option key={area._id} value={area.areaName}>
+                          {area.areaName}
                         </option>
                       ))}
                     </select>

@@ -54,31 +54,30 @@ function DriverDashboard() {
 
       try {
         setLoadingSubAreas(true);
+
         const areaData = await getAreaByName(areaName);
 
-        // Handle different response formats
-        if (areaData && areaData.societies && Array.isArray(areaData.societies)) {
-          // Convert societies to route stops format
-          const stops = areaData.societies.map((society, index) => ({
+        console.log("Area Data:", areaData);
+
+        if (areaData && Array.isArray(areaData.subAreas)) {
+
+          const stops = areaData.subAreas.map((subArea, index) => ({
             stop: index + 1,
-            location: society,
-            time: `${8 + index * 1.5}:00 AM`, // Generate times starting from 8 AM
-            status: index === 0 ? 'In Progress' : 'Pending'
+            location: subArea,
+            time: `${8 + index}:00 AM`,
+            status: index === 0 ? "In Progress" : "Pending"
           }));
+
           setSubAreas(stops);
+
         } else {
-          console.error('Unexpected area data format:', areaData);
+          console.error("No subAreas found");
           setSubAreas([]);
         }
+
       } catch (err) {
-        console.error('Failed to fetch sub-areas:', err);
-        // Fallback to some default sub-areas
-        setSubAreas([
-          { stop: 1, location: `${areaName} - Central`, time: '8:00 AM', status: 'In Progress' },
-          { stop: 2, location: `${areaName} - North`, time: '9:30 AM', status: 'Pending' },
-          { stop: 3, location: `${areaName} - South`, time: '11:00 AM', status: 'Pending' },
-          { stop: 4, location: `${areaName} - East`, time: '12:30 PM', status: 'Pending' }
-        ]);
+        console.error("Failed to fetch sub areas:", err);
+        setSubAreas([]);
       } finally {
         setLoadingSubAreas(false);
       }
