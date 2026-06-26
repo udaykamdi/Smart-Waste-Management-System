@@ -18,6 +18,7 @@ const generalAuthRoutes = require('./routes/auth');
 const binRoutes = require('./routes/binRoutes');
 const { protect } = require('./middleware/auth');
 const Schedule = require('./models/Schedule');
+const areaRoutes = require('./routes/areaRoutes');
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use('/api/auth/admin', authRoutes);
 app.use('/api/auth', generalAuthRoutes);
 app.use('/api/schedules', scheduleRoutes);
 app.use('/api/bins', binRoutes);
+app.use('/api/areas', areaRoutes);
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
