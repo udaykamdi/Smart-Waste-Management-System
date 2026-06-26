@@ -28,24 +28,21 @@ function UserDashboard() {
   const [locations, setLocations] = useState([]);
 
   useEffect(() => {
-    getAreas().then(data => {
-      // Handle different possible response formats
-      if (Array.isArray(data)) {
+    const fetchLocations = async () => {
+      try {
+        const data = await getAreas();
+
+        console.log("Locations:", data);
+
         setLocations(data);
-      } else if (data && Array.isArray(data.areas)) {
-        setLocations(data.areas);
-      } else if (data && data.vadodara_societies_by_area) {
-        // Extract area names from the object
-        const areas = Object.keys(data.vadodara_societies_by_area);
-        setLocations(areas);
-      } else {
-        console.error('Unexpected data format for locations:', data);
+
+      } catch (err) {
+        console.error(err);
         setLocations([]);
       }
-    }).catch(err => {
-      console.error('Failed to fetch locations:', err);
-      setLocations([]);
-    });
+    };
+
+    fetchLocations();
   }, []);
 
   const handleReportSubmit = async (e) => {
@@ -313,10 +310,11 @@ function UserDashboard() {
                     required
                   >
                     <option value="">Select your location</option>
-                    {Array.isArray(locations) && locations.map((loc, index) => (
-                      <option key={index} value={loc.area || loc}>
-                        {loc.area || loc}
-                      </option>
+                    {Array.isArray(locations) &&
+                      locations.map((loc) => (
+                        <option key={loc._id} value={loc.areaName}>
+                          {loc.areaName}
+                        </option>
                     ))}
                   </select>
                 </div>
